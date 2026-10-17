@@ -1,18 +1,24 @@
 
 # Equipment Management API
 
-**Course:**  CIT 3102 – Systems Integration and Architecture  
-**Activity:**  Module 5 – Build an API  
-**Partner 1:**  Petaca, Aegene Troy R.
-**Partner 2:**  Assin, Miguel James 
-**Section:**  IT1E  
-**Resource:**  Equipment
+**Course:** CIT 3102 – Systems Integration and Architecture
+
+**Activity:** Module 5 – Build an API
+
+**Partner 1:** Petaca, Aegene Troy R.
+
+**Partner 2:** Assin, Miguel James
+
+**Section:** IT1E
+
+**Resource:** Equipment
 
 ## 1. Project Setup
 
 This project is a REST API created using Laravel, SQLite, and Laravel Sanctum. It allows authenticated users to create, view, update, and delete equipment records.
 
 ### Requirements
+
 - PHP 8.4 or compatible version
 - Composer
 - Laravel
@@ -24,51 +30,75 @@ This project is a REST API created using Laravel, SQLite, and Laravel Sanctum. I
 
 1. Clone the public GitHub repository.
 
+   ```bash
    git clone https://github.com/itscarms/cit3102-m5-equipment.git
+   ```
 
 2. Enter the project directory.
 
+   ```bash
    cd cit3102-m5-equipment
+   ```
 
 3. Install the project dependencies.
 
+   ```bash
    composer install
+   ```
 
 4. Copy the environment configuration.
 
    Windows:
+   ```cmd
    copy .env.example .env
+   ```
 
    macOS/Linux:
+   ```bash
    cp .env.example .env
+   ```
 
 5. Generate the application key.
 
+   ```bash
    php artisan key:generate
+   ```
 
-6. Set the database connection in the .env file.
+6. Set the database connection in the `.env` file.
 
+   ```env
    DB_CONNECTION=sqlite
+   ```
 
 7. Create the SQLite database file if it does not exist.
 
    Windows Command Prompt:
+   ```cmd
    if not exist database\database.sqlite type nul > database\database.sqlite
+   ```
 
    macOS/Linux:
+   ```bash
    touch database/database.sqlite
+   ```
 
 8. Run the database migrations.
 
+   ```bash
    php artisan migrate
+   ```
 
 9. Start the Laravel development server.
 
+   ```bash
    php artisan serve
+   ```
 
 10. Open Bruno and test the API using:
 
+    ```
     http://127.0.0.1:8000/api
+    ```
 
 Protected endpoints require a Bearer token obtained through the login endpoint.
 
@@ -100,9 +130,83 @@ Filtering is supported through the category and location query parameters.
 
 Example:
 
+```http
 GET /api/equipment?category=Computer&location=Room%20101
+```
+
+### Equipment API Request Examples
+
+The following examples demonstrate how to create and filter equipment records using the API.
+
+#### Example 1: Create Equipment
+
+**Method:** POST
+
+**Endpoint:** `/api/equipment`
+
+**Request Body:**
+
+```json
+{
+  "name": "Keyboard",
+  "category": "Computer",
+  "location": "Room 102",
+  "quantity": 15,
+  "condition": "Good"
+}
+```
+
+**Expected Status:** 201 Created
+
+This request adds a new equipment record to the database. Laravel checks that the required fields are valid before saving the record. If the equipment is successfully created, the API returns HTTP 201.
+
+#### Example 2: Filter Equipment by Category
+
+**Method:** GET
+
+**Endpoint:**
+
+```http
+GET /api/equipment?category=Computer
+```
+
+**Expected Status:** 200 OK
+
+This request retrieves equipment records belonging to the Computer category. Other categories will not be included in the response.
+
+#### Example 3: Filter Equipment by Location
+
+**Method:** GET
+
+**Endpoint:**
+
+```http
+GET /api/equipment?location=Room%20102
+```
+
+**Expected Status:** 200 OK
+
+This request retrieves equipment records stored in Room 102. It is useful when users want to find equipment in a specific location.
+
+#### Example 4: Filter by Category and Location
+
+**Method:** GET
+
+**Endpoint:**
+
+```http
+GET /api/equipment?category=Computer&location=Room%20102
+```
+
+**Expected Status:** 200 OK
+
+This request combines two filters to retrieve only Computer equipment located in Room 102.
+
+**Authentication Note:** All Equipment API endpoints require a valid Bearer token. Users must register and log in before accessing these protected routes.
 
 ## 3. Bruno API Testing Screenshots
+
+The following screenshots show the ten required API requests tested using Bruno, including the request details, server responses, and HTTP status codes.
 
 ### Test 1 – Register User (201 Created)
 
